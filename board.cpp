@@ -4,10 +4,18 @@
 #include "board.h"
 using namespace std;
 
+
+
+//=================================Constructors=================================
+//
+//==============================================================================
+
+
+
 board::board()
 {
-	*victor = '\0';
-	//cout << "Board constructor call\n Initialising array with values: ";
+	victor = '\0';
+	//cout << "Board constructor call\n Initialising array with values: ";//Debug
 
 	for (int i = 0; i<10; i++)  
 		{
@@ -18,11 +26,17 @@ board::board()
 			
 			boardArray[row][collumn] = cVal;
 		}
-	//cout << "\nConstructor complete\n";
+	//cout << "\nConstructor complete\n";//Debug
 }
 
 
 //=================================CHECKVICTORY=================================
+//			Loop over all rows, collumns and diagonals determine if a
+//			victory state has been reached. Set char victory to the 
+//			winning character (X or O)
+//==============================================================================
+
+
 bool board::checkVictory()
 {
 	char testR[3];//TestRow
@@ -74,15 +88,31 @@ bool board::checkVictory()
 	return false;
 }
 
+
+
+//=================================TESTARRAY=================================
+//			Test char array[3] to see if all elements are equal
+//===========================================================================
+
+
+
 bool board::testArray(char array[3])
 {
+
 	if(array[0]==array[1] && array[1]==array[2])
 	{	
+		victor = array[0];
 		return true;
-		*victor = array[0];
+		
 	}
 	return false;
 }
+
+//=================================MAKEMOVE=================================
+//			Take character and place it on board
+//			In future will take an integer input in stead of 
+//			reading from command line here
+//==========================================================================
 
 bool board::makeMove(char piece)//Needs to change to take int, move logic to game methods
 {
@@ -113,7 +143,9 @@ bool board::makeMove(char piece)//Needs to change to take int, move logic to gam
 	return true;
 }
 
-//==============Print Board Function====================
+//=================================PRINTBOARD=================================
+//			Prints out boardArray to the command line
+//============================================================================
 void board::printBoard()
 {
 	cout << "\n\n";
