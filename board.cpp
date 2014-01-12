@@ -143,6 +143,23 @@ bool board::makeMove(char piece)//Needs to change to take int, move logic to gam
 	return true;
 }
 
+//=================================RESETBOARD=================================
+//			Resets the game without destroying everything and starting over
+//============================================================================
+void board::resetBoard()
+{
+	victor = '\0';
+	//cout << "Board constructor call\n Initialising array with values: ";//Debug
+
+	for (int i = 0; i<10; i++)  
+	{
+		int row = i/3;
+		int collumn = i%3;
+		char cVal = '0' + i;
+	
+		boardArray[row][collumn] = cVal;
+	}
+}
 //=================================PRINTBOARD=================================
 //			Prints out boardArray to the command line
 //============================================================================
