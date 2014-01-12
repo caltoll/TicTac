@@ -35,7 +35,7 @@ int main()
 	while(true)
 	{	
 		board gameBoard = board();
-		cout << "Back to main" << endl;
+		//cout << "Back to main" << endl; //Debug text
 		
 		char cont = '\0'; //Char will be set to y or n
 		char victory = '\0'; //Char will be set to X or O
@@ -85,11 +85,15 @@ int main()
 			cout << "\n\t Nought is the winner!"<<endl;
 		}
 
-		if(victory=='X')
+		else if(victory=='X')
 		{
 			cout << "\n\t Cross is the winner! "<<endl;
 		}
 
+		else 
+		{
+			cout << "Tie game!";
+		}
 		cout << "\n\tWould you like another game?" << endl;
 		
 		while(cont != 'y' && cont != 'n')
