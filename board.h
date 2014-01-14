@@ -6,11 +6,11 @@ class board
 
 public:
 	board();
-	~board(){};
+	~board();
 
 	bool checkVictory(); //Check if the board is in a victory state & set getVictor											
 	void printBoard(); // Print the board with characters separated by | and _
-	bool makeMove(char place);
+	bool makeMove(char place, int move);
 	char getVictor(){return victor;}
 	void resetBoard();
 

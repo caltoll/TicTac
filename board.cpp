@@ -15,7 +15,7 @@ using namespace std;
 board::board()
 {
 	victor = '\0';
-	//cout << "Board constructor call\n Initialising array with values: ";//Debug
+	cout << "Board constructor call";//Debug
 
 	for (int i = 0; i<10; i++)  
 		{
@@ -26,10 +26,13 @@ board::board()
 			
 			boardArray[row][collumn] = cVal;
 		}
-	//cout << "\nConstructor complete\n";//Debug
+	cout << "\nConstructor complete\n";//Debug
 }
 
-
+board::~board()
+{
+	cout<<"Board destructor called"<<endl;
+}
 //=================================CHECKVICTORY=================================
 //			Loop over all rows, collumns and diagonals determine if a
 //			victory state has been reached. Set char victory to the 
@@ -114,32 +117,21 @@ bool board::testArray(char array[3])
 //			reading from command line here
 //==========================================================================
 
-bool board::makeMove(char piece)//Needs to change to take int, move logic to game methods
+bool board::makeMove(char piece, int move)//Needs to change to take int, move logic to game methods
 {
 	int r,c;
-	int move;
-	if (!(cin >> move) || move > 9) //Check that its a valid integer
-	{
-		cout << "\nEnter a valid square to move to: ";
-	
-		cin.clear();
-		cin.ignore();
-		return false;
-
-	}
-	
+			
 	
 	r = move/3;
 	c = move%3;
 	if((boardArray[r][c] == 'X')||(boardArray[r][c] == 'O'))
 	{
-		cout << "\nThat space is already taken, enter another: ";
 		return false;
 	}
 	
 		//Int/3 always rounds down, 
 	boardArray[r][c] = piece;
-	printBoard();
+	
 	return true;
 }
 
