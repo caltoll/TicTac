@@ -10,3 +10,4 @@ TODO
 ----
 
 Adding AI using TTree class. Mapping possible moves in advance
+Board class needs a copy constructor
