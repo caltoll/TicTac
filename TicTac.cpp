@@ -3,89 +3,152 @@
 //Goal: Separate game implementation and board implementation. No board method should
 //print to the command line.
 
-//TODO
-//Put turn logic in its own class
-//Move player input from board class to game implementation, 
-//	make makeMove(char) take an integer input makeMove(int, char)
 
 
 #include <iostream>
+#include <string>
 #include "board.h"
+
 using namespace std;
 
-
-
-void turn()
+class game
 {
+public:
+	game();
+	
 
+	void playerTurn(char player);
+	void gameTurn();
+	void resetGame();
+	int playerInput();
+
+	bool isOver(){return gameOver;}
+	char getVictor(){return victor;}
+        string getStatus();
+
+private:
+	int turnNumber;
+	bool gameOver;
+	char victor;
+	board gameBoard;
+        
+};
+
+game::game()
+{
+	turnNumber = 0;
+	gameOver = false;
+	victor = '\0';
+	
+
+}
+
+void game::resetGame()
+{
+	turnNumber = 0;
+	gameOver = false;
+	victor = '\0';
+	gameBoard.resetBoard();
+	gameBoard.printBoard();
+}
+
+
+
+void game::gameTurn()
+{
+	if (!gameOver)
+		playerTurn('O');
+
+	if ( turnNumber == 9) 
+	{
+		gameOver = true;
+		return;
+	}
+
+	if (!gameOver)
+		playerTurn('X');
+}
+
+string game::getStatus()
+{
+    string temp = gameBoard.getStatus();
+    return temp;
+}
+
+void game::playerTurn(char player)
+{
+	turnNumber++;
+
+	if(player == 'O')
+		cout << "Nought: ";
+	else if (player == 'X')
+		cout << "Cross: ";
+	int move = playerInput();
+
+	while (!gameBoard.makeMove(player, move))
+	{cout << "Invalid move, make another";}
+
+	if (gameBoard.checkVictory())
+		{
+			gameOver = true;
+			victor = gameBoard.getVictor();
+		}
+
+	gameBoard.printBoard();
+
+}
+
+int game::playerInput()
+{
+	int move;
+	while(!(cin >> move) || move > 8) //Check that its a valid integer
+	{
+		cout << "\nEnter a valid square to move to: ";
+	
+		cin.clear();
+		cin.ignore();
+	}
+
+	return move;
 }
 
 //=================================MAIN=================================
 int main()
 {
 	cout 	<<"\n\n\t==================================== \n"
-			<<"\t Noughts and Crosses (1986 version) \n" 
+			<<"\t Noughts and Crosses \n" 
 			<<" \t====================================\n"
 			<<"\n\n\t *For two players \n\n\t *Enter the number shown on the square you want"
 			<<"\n\n\t *Continue taking turns until one or the other completes\n\t  a row, a column or a diagonal"
 			<<"\n\n\n\t\t--Press enter to start a game--"
 			<< endl;
 
-			cin.ignore();
+	cin.ignore();
+
+	game thisGame = game();
+
 	while(true)
 	{	
-		board gameBoard = board();
-		//cout << "Back to main" << endl; //Debug text
 		
-		char cont = '\0'; //Char will be set to y or n
-		char victory = '\0'; //Char will be set to X or O
-	
-		int move;
-		int turn = 0;
+		thisGame.resetGame();
 
-		gameBoard.printBoard();
-		
-		
-		
-		while(true)
+		while(!thisGame.isOver()) //two segments : GAME and TURN
 		{
-
-			//Nought's Turn
-			turn++;
-			cout << "\n\tNought: ";
-			while(!gameBoard.makeMove( 'O'))
-			{}
-
-			if(gameBoard.checkVictory())
-			{
-				victory = 'O';
-				break;
-			}
-
-			if(turn==9) //Awkward, but this loop has to stop after 9 turns
-				break;
-
-			//Cross' Turn
-			turn++;
-			cout << "\n\tCross: ";
-			while(!gameBoard.makeMove('X'))
-			{}
-
-			if(gameBoard.checkVictory())
-			{
-				victory = 'X';
-				break;
-			}
+			thisGame.gameTurn();
 		}
 		
-		victory = gameBoard.getVictor();
-		cout << "\n\t *****Game Over*****"<<endl;
-		if(victory=='O')
+		
+		char cont = '\0';
+
+
+		cout << "\n\t" << thisGame.getStatus() << "\n\n\t *****Game Over*****"<<endl;
+
+		if(thisGame.getVictor() =='O')
 		{
 			cout << "\n\t Nought is the winner!"<<endl;
 		}
 
-		else if(victory=='X')
+		else if(thisGame.getVictor() =='X')
 		{
 			cout << "\n\t Cross is the winner! "<<endl;
 		}
@@ -94,6 +157,7 @@ int main()
 		{
 			cout << "Tie game!";
 		}
+
 		cout << "\n\tWould you like another game?" << endl;
 		
 		while(cont != 'y' && cont != 'n')
@@ -108,9 +172,8 @@ int main()
 	} 
 
 	cout << "\tGoodbye" << endl;
-	return 0;
-
 	
+        return 0;
 }
 
 

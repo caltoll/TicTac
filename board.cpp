@@ -1,8 +1,10 @@
 //board.cpp
 //Board class implementation
 #include <iostream>
+#include <string>
 #include "board.h"
-using namespace std;
+using std::cout;
+using std::endl;
 
 
 
@@ -29,10 +31,7 @@ board::board()
 	cout << "\nConstructor complete\n";//Debug
 }
 
-board::~board()
-{
-	cout<<"Board destructor called"<<endl;
-}
+
 //=================================CHECKVICTORY=================================
 //			Loop over all rows, collumns and diagonals determine if a
 //			victory state has been reached. Set char victory to the 
@@ -63,25 +62,25 @@ bool board::checkVictory()
 
 		if(board::testArray(testR))
 		{
-			cout<<"\tRow Complete"<<endl;
+			status = "Row Complete";
 			return true; 
 		}
 
 		if(board::testArray(testC))
 		{	
-			cout<<"\tColumn Complete"<<endl;
+			status = "Column Complete";
 			return true;
 		}
 
 		if(board::testArray(testD1))
 		{
-			cout << "\tDiagonal Complete" << endl;
+			status = "Diagonal Complete";
 			return true;
 		}
 
 		if(board::testArray(testD2))
 		{
-			cout << "\tDiagonal Complete" << endl;
+			status = "Diagonal Complete";
 			return true;
 		}
 	
@@ -113,26 +112,27 @@ bool board::testArray(char array[3])
 
 //=================================MAKEMOVE=================================
 //			Take character and place it on board
-//			In future will take an integer input in stead of 
-//			reading from command line here
+//			at integer position
 //==========================================================================
 
 bool board::makeMove(char piece, int move)//Needs to change to take int, move logic to game methods
 {
-	int r,c;
-			
-	
-	r = move/3;
-	c = move%3;
-	if((boardArray[r][c] == 'X')||(boardArray[r][c] == 'O'))
-	{
-		return false;
-	}
-	
-		//Int/3 always rounds down, 
-	boardArray[r][c] = piece;
-	
-	return true;
+    if (move>8)
+        return false;
+
+    int r,c;
+
+    r = move/3;
+    c = move%3;
+    if((boardArray[r][c] == 'X')||(boardArray[r][c] == 'O'))
+    {
+            return false;
+    }
+
+            //Int/3 always rounds down, 
+    boardArray[r][c] = piece;
+
+    return true;
 }
 
 //=================================RESETBOARD=================================
