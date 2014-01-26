@@ -40,10 +40,10 @@ board board::operator=(const board& rhs)
 
 	for (int i=0;i<3;i++)
 	{
-		cout << "loop i: "<<i <<endl;
+		//cout << "loop i: "<<i <<endl; //DEBUG
 		for (int j=0;j<3;j++)
 		{
-			cout << "loop j: "<< j <<endl;
+			//cout << "loop j: "<< j <<endl; //DEBUG
 			boardArray[i][j]=rhs.boardArray[i][j];
 		}
 	}
