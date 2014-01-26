@@ -62,7 +62,7 @@ void TTree::destroyTree()
 
 void TTree::destroyTree(node * leaf)
 {
-	cout << "DestroyTree() Call" << endl;
+	//cout << "DestroyTree() Call" << endl;
 	
 	if (leaf!=NULL)
 	{
@@ -72,16 +72,18 @@ void TTree::destroyTree(node * leaf)
 		{
 			if ((leaf -> childNode[i]) != NULL)
 			{
-				cout << "Destroying Childnode " << i << endl;
+				//cout << "Destroying Childnode " << i << endl;
 				destroyTree(leaf->childNode[i]);
 			}
 		}
-		cout << "Delete leaf\n";
+	//	cout << "Delete leaf\n";
 		delete leaf;
-		leaf = 0;
+		leaf = NULL;
 	}
 	
-}
+}//At some point I am calling delete on a null pointer
+
+
 
 
 //Build tree needs 2 versions, one to start and initialise the node it is in, one to make the 
@@ -89,21 +91,22 @@ void TTree::destroyTree(node * leaf)
 
 void TTree::fillTree()
 {
-	cout << "FillTree start\n";
+	//cout << "FillTree start\n";
 	
 	if (root != NULL)
 		fillTree(root);
 	else
 	{
-		cout << "initialising root" << endl;
+		//cout << "initialising root" << endl;
 		root = new node;
+		nodesCreated++;
 		
 		for (int i=0; i<9; i++)
 		{
 			nodesCreated++;
-			cout << "Child Node of root " << i << endl;
+			//cout << "Child Node of root " << i << endl;
 			root -> childNode[i] = new node;
-			root -> childNode[i] -> nodeBoard = root -> nodeBoard; //!!! this will crash with current setup of board
+			root -> childNode[i] -> nodeBoard = root -> nodeBoard;
 			root -> childNode[i] -> turn = 'O';
 			root -> childNode[i] -> move = i;
 			//make each childnode's childnodes NULL
@@ -120,25 +123,33 @@ void TTree::fillTree()
 void TTree::fillTree(node * leaf)
 {	
 	
-	if (!(leaf->nodeBoard.makeMove(leaf->turn, leaf->move))) //failure: this always fails for some reason
+	if ((leaf->nodeBoard.makeMove(leaf->turn, leaf->move))) 
 	{
-		destroyTree(leaf);
-		return;
-	}
+			
 
-	for (int i=0; i<9; i++)
+		for (int i=0; i<9; i++)
 		{
-			cout <<"FillTree(node)";
+			//cout <<"FillTree(node)";
 			nodesCreated++;
-			cout << "Child Node " << i << endl;
+			//cout << "Child Node " << i << endl;
 			leaf -> childNode[i] = new node;
-			leaf -> childNode[i] -> nodeBoard = leaf -> nodeBoard; //!!! this will crash with current setup of board
+			leaf -> childNode[i] -> nodeBoard = leaf -> nodeBoard; 
 			leaf -> childNode[i] -> move = i;
+			//cout<<"Setting childnodes to NULL...";
+			for(int j =0; j<9 ; j++)
+				leaf -> childNode[i] -> childNode[j] = NULL;
+			//cout << "Done\n";
+
+			//cout << "Setting turns...";
 			if(leaf -> turn == 'O')
 				leaf -> childNode[i] -> turn = 'X';
 			else if (leaf -> turn == 'X')
 				leaf -> childNode[i] -> turn = 'O';
-		} 
+			//cout << "Done\n";
+
+			fillTree(leaf -> childNode[i]);
+		}
+	} 
 }
 
 int main()
@@ -147,4 +158,5 @@ int main()
 	test.fillTree();
 	cout << test.getNodesCreated() << " nodes created" << endl;
 	cout << test.getNodesDestroyed() << " nodes destroyed" << endl;
+	cin.ignore();
 }
